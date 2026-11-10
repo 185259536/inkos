@@ -31,6 +31,21 @@ pnpm test         # Run all tests
 pnpm typecheck    # Type-check without emitting
 ```
 
+## Fork 同步
+
+在 `develop` 分支执行：
+
+```bash
+./scripts/sync-fork.mjs
+```
+
+脚本仅依赖 Node.js 和 Git，无需安装项目依赖。需要已配置 `origin`（自己的 fork）、`upstream`（原仓库），以及 `master`、`develop` 和对应的 `origin` 分支。
+脚本先拉取两个远端，将 `master` 快进到 `upstream/master` 并推送到 fork，再将 `master` 合并到 `develop` 并推送，全程保留开发提交的历史。
+
+执行前需提交或自行暂存工作区改动。`master` 或 `origin/master` 存在上游没有的提交、`develop` 与 `origin/develop` 无法快进同步时，脚本会停止，留待人工处理。
+若合并上游时发生冲突，脚本停在 `develop`；解决冲突并提交后重新执行脚本，或用 `git merge --abort` 撤销这次合并。
+推送失败时已完成的本地更新或远端推送会保留，处理失败原因后可重新执行。
+
 ## Commit Convention
 
 ```
